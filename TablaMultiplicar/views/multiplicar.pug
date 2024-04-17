@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Tabla de Multiplicar del #{numero}
+    link(rel="stylesheet", href="/css/styles.css")
+  body
+    .container
+      h1 Tabla de multiplicar del #{numero}
+      table
+        thead
+          tr
+            th Multiplicando
+            th Resultado
+        tbody
+          each item in multiplicacion
+            tr
+              td #{numero} x #{item.multiplicando}
+              td= item.resultado
