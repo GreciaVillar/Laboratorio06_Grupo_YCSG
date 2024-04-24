@@ -1,8 +1,6 @@
-
 const express = require('express');
 const path = require('path');
 const { MongoClient } = require('mongodb');
-const bodyParser = require('body-parser');
 
 const app = express();
 app.set('view engine', 'pug'); // Puedes elegir solo uno de los motores de plantillas, aquí solo se usará 'pug'
@@ -16,7 +14,7 @@ async function connectToDatabase() {
         await client.connect();
         console.log('Conectado a la base de datos');
 
-        const db = client.db('bd_pasteleria');  // Obtenemos una referencia a la base de datos
+        const db = client.db(); // Obtenemos una referencia a la base de datos
 
         const imagesCollection = db.collection('imagenes'); // Obtén una referencia a la colección 'imagenes'
 
@@ -65,35 +63,9 @@ async function connectToDatabase() {
             res.render('contacto', { title: 'Contacto' });
         });
 
-        app.post('/confirmacion', async (req, res) => {
-            try {
-                const { correo, nombre, mensaje } = req.body;
-                console.log('Datos recibidos del formulario:');
-                console.log('Correo:', correo);
-                console.log('Nombre:', nombre);
-                console.log('Mensaje:', mensaje);
-
-                if (!correo || !nombre || !mensaje) {
-                    return res.status(400).send('Por favor complete todos los campos del formulario.');
-                }
-        
-                const testimoniosCollection = db.collection('testimonios');
-        
-                await testimoniosCollection.insertOne({ correo, nombre, mensaje });
-
-                app.use((err, req, res, next) => {
-                    console.error(err.stack);
-                    res.status(500).send('Algo salió mal!');
-                });
-        
-                res.render('confirmacion', { title: 'Confirmación' });
-        
-            } catch (error) {
-                console.error('Error al guardar el testimonio en la base de datos:', error);
-                res.status(500).send('Ocurrió un error al guardar el testimonio en la base de datos.');
-            }
+        app.get('/confirmacion', (req, res) => {
+            res.render('confirmacion', { title: 'Confirmación' });
         });
-
 
         app.listen(3000, () => {
             console.log('Servidor en funcionamiento en http://localhost:3000');
